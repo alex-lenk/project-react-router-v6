@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 // Librares
 import * as Yup from "yup";
-import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useFormik, FormikProvider } from "formik";
 // Store
@@ -15,6 +14,7 @@ import TextField from "../components/inputs/TextInput";
 import Card from "../components/Card";
 // Icons
 import { UserIcon, KeyIcon } from "@heroicons/react/outline";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
     username: Yup.string().required("This field is required!"),
@@ -29,8 +29,10 @@ const initialValues = {
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
     const { message } = useSelector((state) => state.message);
-    const history = useHistory();
+
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
 
     useEffect(() => {
         dispatch(clearMessage());
@@ -39,13 +41,13 @@ const LoginPage = () => {
     const handleLogin = (formValue) => {
         const { username, password } = formValue;
         setLoading(true);
-        const redirect = history.location.state
-            ? history.location.state.referrer.pathname
-            : null;
+        const redirect = location.state
+            ? location.state.referrer.pathname
+            : "/posts";
         dispatch(login({ username, password }))
             .unwrap()
             .then(() => {
-                history.push(redirect || "/");
+                navigate(redirect, { replace: true });
             })
             .catch(() => {
                 setLoading(false);
@@ -65,7 +67,7 @@ const LoginPage = () => {
 
                 <div className='text-sm text-slate-600'>
                     or{" "}
-                    <StyledNavLink to='/auth/signUp' styleType='underline'>
+                    <StyledNavLink to='../signUp' styleType='underline'>
                         {" "}
                         start your 14-day free trial
                     </StyledNavLink>

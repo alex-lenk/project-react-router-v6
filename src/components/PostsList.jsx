@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useRouteMatch } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import DateDisplay from "./DateDisplay";
 const PostsList = ({ children }) => {
     return (
@@ -14,7 +14,7 @@ const PostListItem = ({ item }) => {
         id: postId,
         attributes: { title, "publish-date": publishDate, content },
     } = item;
-    let { url } = useRouteMatch();
+    // let { url } = useRouteMatch();
 
     return (
         <article className='relative group'>
@@ -46,7 +46,7 @@ const PostListItem = ({ item }) => {
                 </dl>
             </div>
             <NavLink
-                to={`${url}/${postId}`}
+                to={postId}
                 className='flex items-center text-sm text-sky-500 font-medium'
             >
                 <span className='absolute -inset-y-2.5 -inset-x-4 md:-inset-y-4 md:-inset-x-6 sm:rounded-2xl'></span>

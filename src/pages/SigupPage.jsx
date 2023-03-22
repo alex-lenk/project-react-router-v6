@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 // Librares
 import * as Yup from "yup";
-import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useFormik, FormikProvider } from "formik";
 // Store
@@ -15,6 +14,7 @@ import SpinLoading from "../components/SpinLoader";
 import StyledNavLink from "../components/StyledNavLink";
 //Icons
 import { UserIcon, KeyIcon, MailIcon } from "@heroicons/react/outline";
+import { useNavigate } from "react-router-dom";
 
 const signUpSchema = Yup.object({
     username: Yup.string()
@@ -36,7 +36,8 @@ const SignUpPage = () => {
     const [loading, setLoading] = useState(false);
     const [successful, setSuccessful] = useState(false);
     const { message } = useSelector((state) => state.message);
-    const history = useHistory();
+
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -47,11 +48,12 @@ const SignUpPage = () => {
         const { username, email, password } = formValues;
         setLoading(true);
         setSuccessful(false);
+
         dispatch(signUp({ username, email, password }))
             .unwrap()
             .then(() => {
                 setSuccessful(true);
-                history.push("/");
+                navigate("/posts");
             })
             .catch(() => {
                 setSuccessful(false);
@@ -115,7 +117,7 @@ const SignUpPage = () => {
             </FormikProvider>
             <p className='text-slate-600 text-sm'>
                 <span> Already have account? </span>
-                <StyledNavLink styleType='underline' to='/auth/login'>
+                <StyledNavLink styleType='underline' to={"/auth/login"}>
                     Log In
                 </StyledNavLink>
             </p>
